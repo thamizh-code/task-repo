@@ -25,7 +25,7 @@ resource "aws_route_table" "public_rt" {
 
 resource "aws_route" "routing" {
   route_table_id = aws_route_table.public_rt.id
-  destination_cidr_block = "0.0.0.0./0"
+  destination_cidr_block = "0.0.0.0/0"
   gateway_id = aws_internet_gateway.my_gw.id
 }
 
