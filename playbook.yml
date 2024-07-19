@@ -1,0 +1,34 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Read tf output
+      command: terraform output -json
+      register: terraform_output
+
+    - name: Parse terraform output
+      set_fact: 
+      instance_id: "{{ terraform_output.stdout | from.json | json_query('public_ip.value') }}"
+
+    - name: print instance id
+      debug: 
+      msg: "The instance id is {{ instance_id }}"
+    - name: find the host
+      add_host:
+        name: "ec2_instance"
+        ansible_host: "{{ instance_public_ip }}"
+        ansible_user: ec2-user
+        ansible_ssh_private_key_file: "~/.ssh/19072024.pem" 
+    - name: install apache  
+      yum:
+        name: httpd
+        state: present
+    - name: start apache
+      service: 
+        name: httpd
+        state: started 
+    - name: copy the app
+      copy:
+        src: ./index.html
+        dest: /var/www/html
+        mode: 0777
+
