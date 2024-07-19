@@ -12,7 +12,7 @@ resource "aws_subnet" "pub_subnet" {
 }
 
 resource "aws_internet_gateway" "my_gw" {
-  Vpc_id = aws_vpc.my_vpc.id
+  vpc_id = aws_vpc.my_vpc.id
 
   tags = {
      Name = "my_igw"
@@ -40,7 +40,7 @@ resource "aws_security_group" "public_sg" {
     from_port = 80
     to_port    = 80
     protocol = "tcp"
-   codr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
  }
  egress {
     from_port  = 0 
